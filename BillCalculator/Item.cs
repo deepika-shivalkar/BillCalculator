@@ -18,23 +18,23 @@
         public override bool Equals(object obj)
         {
             return obj is Item item &&
-                   name == item.name &&
-                   price == item.price;
+                   this.name == item.name &&
+                   this.price == item.price;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(name, price);
+            return HashCode.Combine(this.name, this.price);
         }
 
         public string GetName()
         {
-            return name;
+            return this.name;
         }
 
         public double GetPrice()
         {
-            return price;
+            return this.price;
         }
     }
 }

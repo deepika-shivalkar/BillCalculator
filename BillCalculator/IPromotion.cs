@@ -4,8 +4,8 @@ using System.Text;
 
 namespace BillCalculator
 {
-   public interface IPromotion
+    public interface IPromotion
     {
-
+        double Execute(ref Dictionary<Item, int> itemDetailsWithoutOffer);
     }
 }

@@ -52,5 +52,23 @@
 
             return count;
         }
+
+        public double GetCartTotalWithOffer(IPromotion promotion)
+        {
+            Dictionary<Item, int> itemDetailsWithoutOffer = new Dictionary<Item, int>();
+            foreach (Item item in this.itemDetails.Keys)
+            {
+                itemDetailsWithoutOffer.Add(item, this.itemDetails[item]);
+            }
+
+            double discountedTotal = promotion.Execute(ref itemDetailsWithoutOffer);
+
+            foreach (Item item in itemDetailsWithoutOffer.Keys)
+            {
+                discountedTotal = discountedTotal + (item.GetPrice() * itemDetailsWithoutOffer[item]);
+            }
+
+            return discountedTotal;
+        }
     }
 }

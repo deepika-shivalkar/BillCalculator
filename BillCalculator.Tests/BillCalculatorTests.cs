@@ -58,7 +58,11 @@ namespace BillCalculator.Tests
         {
             Item B = new Item("B", 30.00);
             IPromotion twoBfor45 = new StandAloneAbsolutePromotion(B, 2, 45.00);
-           
+            ShoppingCart c = new ShoppingCart();
+            c.AddItem(B, 5);
+            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            Assert.NotNull(cartDetails);
+            Assert.Equal(120, c.GetCartTotalWithOffer(twoBfor45));
         }
 
     }

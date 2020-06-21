@@ -65,5 +65,22 @@ namespace BillCalculator.Tests
             Assert.Equal(120, c.GetCartTotalWithOffer(twoBfor45));
         }
 
+        [Fact]
+        public void ShouldExecuteSingleCumulativeAbsolutePromotionOnShoppingCard()
+        {
+            Item C = new Item("C", 20.00);
+            Item D = new Item("D", 15.00);
+            List<Item> itemList = new List<Item>();
+            itemList.Add(C);
+            itemList.Add(D);
+            IPromotion cAndDFor30 = new CumulativeAbsolutePromotion(itemList, 30.00);
+            ShoppingCart c = new ShoppingCart();
+            c.AddItem(C, 2);
+            c.AddItem(D);
+            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            Assert.NotNull(cartDetails);
+            Assert.Equal(50, c.GetCartTotalWithOffer(cAndDFor30));
+        }
+
     }
 }

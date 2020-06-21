@@ -10,10 +10,10 @@ namespace BillCalculator.Tests
         [Fact]
         public void ShouldAddSingleItemsToCart()
         {
-            ShoppingCart c = new ShoppingCart();
+            ShoppingCart sc = new ShoppingCart();
             Item a = new Item("A", 50.00);
-            c.AddItem(a);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            sc.AddItem(a);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
             Assert.NotNull(cartDetails);
             Assert.Equal(1, cartDetails[a]);
         }
@@ -21,9 +21,9 @@ namespace BillCalculator.Tests
         [Fact]
         public void ShouldAddMultipleItemsToCart()
         {
-            ShoppingCart c = new ShoppingCart();
-            c.AddItem(new Item("A", 50.00), 3);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            ShoppingCart sc = new ShoppingCart();
+            sc.AddItem(new Item("A", 50.00), 3);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
             Assert.NotNull(cartDetails);
             Assert.Equal(3, cartDetails[new Item("A", 50.00)]);
         }
@@ -31,89 +31,106 @@ namespace BillCalculator.Tests
         [Fact]
         public void ShouldCalculateShoppingCartTotalWithoutOffer()
         {
-            ShoppingCart c = new ShoppingCart();
-            c.AddItem(new Item("A", 50.00), 3);
-            c.AddItem(new Item("B", 30.00), 5);
-            c.AddItem(new Item("C", 20.00), 2);
-            c.AddItem(new Item("D", 15.00), 1);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            ShoppingCart sc = new ShoppingCart();
+            sc.AddItem(new Item("A", 50.00), 3);
+            sc.AddItem(new Item("B", 30.00), 5);
+            sc.AddItem(new Item("C", 20.00), 2);
+            sc.AddItem(new Item("D", 15.00), 1);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
             Assert.NotNull(cartDetails);
-            Assert.Equal(355, c.GetCartTotal());
+            Assert.Equal(355, sc.GetCartTotal());
         }
 
         [Fact]
         public void ShouldCountItemsInShoppingCart()
         {
-            ShoppingCart c = new ShoppingCart();
-            c.AddItem(new Item("A", 50.00), 3);
-            c.AddItem(new Item("B", 30.00), 5);
-            c.AddItem(new Item("C", 20.00), 2);
-            c.AddItem(new Item("D", 15.00), 1);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            ShoppingCart sc = new ShoppingCart();
+            sc.AddItem(new Item("A", 50.00), 3);
+            sc.AddItem(new Item("B", 30.00), 5);
+            sc.AddItem(new Item("C", 20.00), 2);
+            sc.AddItem(new Item("D", 15.00), 1);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
             Assert.NotNull(cartDetails);
-            Assert.Equal(11, c.GetItemsCount());
+            Assert.Equal(11, sc.GetItemsCount());
         }
 
         [Fact]
         public void ShouldExecuteSingleStandAloneAbsolutePromotionOnShoppingCart()
         {
-            Item B = new Item("B", 30.00);
-            IPromotion twoBfor45 = new StandAloneAbsolutePromotion(B, 2, 45.00);
-            ShoppingCart c = new ShoppingCart();
-            c.AddItem(B, 5);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            Item b = new Item("B", 30.00);
+            IPromotion twoBfor45 = new StandAloneAbsolutePromotion(b, 2, 45.00);
+            ShoppingCart sc = new ShoppingCart();
+            sc.AddItem(b, 5);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
             List<IPromotion> promoList = new List<IPromotion>();
             promoList.Add(twoBfor45);
             Assert.NotNull(cartDetails);
-            Assert.Equal(120, c.GetCartTotalWithPromotion(promoList));
+            Assert.Equal(120, sc.GetCartTotalWithPromotion(promoList));
         }
 
         [Fact]
         public void ShouldExecuteSingleCumulativeAbsolutePromotionOnShoppingCard()
         {
-            Item C = new Item("C", 20.00);
-            Item D = new Item("D", 15.00);
+            Item c = new Item("C", 20.00);
+            Item d = new Item("D", 15.00);
             List<Item> itemList = new List<Item>();
-            itemList.Add(C);
-            itemList.Add(D);
+            itemList.Add(c);
+            itemList.Add(d);
             IPromotion cAndDFor30 = new CumulativeAbsolutePromotion(itemList, 30.00);
-            ShoppingCart c = new ShoppingCart();
-            c.AddItem(C, 2);
-            c.AddItem(D);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            ShoppingCart sc = new ShoppingCart();
+            sc.AddItem(c, 2);
+            sc.AddItem(d);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
             List<IPromotion> promoList = new List<IPromotion>();
             promoList.Add(cAndDFor30);
             Assert.NotNull(cartDetails);
-            Assert.Equal(50, c.GetCartTotalWithPromotion(promoList));
+            Assert.Equal(50, sc.GetCartTotalWithPromotion(promoList));
         }
 
-        
+
+        [Fact]
+        public void ShouldExecuteScenarioA()
+        {
+            ShoppingCart sc = new ShoppingCart();
+            Item a = new Item("A", 50.00);
+            Item b = new Item("B", 30.00);
+            Item c = new Item("C", 20.00);
+            Item d = new Item("D", 15.00);
+            sc.AddItem(a);
+            sc.AddItem(b);
+            sc.AddItem(c);
+            List<IPromotion> promoList = this.GetAvailablePromotions(a, b, c, d);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
+
+            Assert.NotNull(cartDetails);
+            Assert.Equal(100, sc.GetCartTotalWithPromotion(promoList));
+        }
 
         [Fact]
         public void ShouldExecuteScenarioB()
         {
-            ShoppingCart c = new ShoppingCart();
-            Item A = new Item("A", 50.00);
-            Item B = new Item("B", 30.00);
-            Item C = new Item("C", 20.00);
-            Item D = new Item("D", 15.00);
-            c.AddItem(A, 5);
-            c.AddItem(B, 5);
-            c.AddItem(C);
-            List<IPromotion> promoList = this.GetAvailablePromotions(A, B, C, D);
-            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            ShoppingCart sc = new ShoppingCart();
+            Item a = new Item("A", 50.00);
+            Item b = new Item("B", 30.00);
+            Item c = new Item("C", 20.00);
+            Item d = new Item("D", 15.00);
+            sc.AddItem(a, 5);
+            sc.AddItem(b, 5);
+            sc.AddItem(c);
+            List<IPromotion> promoList = this.GetAvailablePromotions(a, b, c, d);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
 
             Assert.NotNull(cartDetails);
-            Assert.Equal(370, c.GetCartTotalWithPromotion(promoList));
+            Assert.Equal(370, sc.GetCartTotalWithPromotion(promoList));
         }
 
-        private List<IPromotion> GetAvailablePromotions(Item A, Item B, Item C, Item D)
+        private List<IPromotion> GetAvailablePromotions(Item a, Item b, Item c, Item d)
         {
-            IPromotion threeAFor130 = new StandAloneAbsolutePromotion(A, 3, 130.00);
-            IPromotion twoBFor45 = new StandAloneAbsolutePromotion(B, 2, 45.00);
+            IPromotion threeAFor130 = new StandAloneAbsolutePromotion(a, 3, 130.00);
+            IPromotion twoBFor45 = new StandAloneAbsolutePromotion(b, 2, 45.00);
             List<Item> itemList = new List<Item>();
-            itemList.Add(C);
-            itemList.Add(D);
+            itemList.Add(c);
+            itemList.Add(d);
             IPromotion cAndDFor30 = new CumulativeAbsolutePromotion(itemList, 30.00);
             List<IPromotion> promoList = new List<IPromotion>();
             promoList.Add(threeAFor130);

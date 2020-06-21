@@ -40,5 +40,18 @@ namespace BillCalculator.Tests
             Assert.Equal(355, c.GetCartTotal());
         }
 
+        [Fact]
+        public void ShouldCountItemsInShoppingCart()
+        {
+            ShoppingCart c = new ShoppingCart();
+            c.AddItem(new Item("A", 50.00), 3);
+            c.AddItem(new Item("B", 30.00), 5);
+            c.AddItem(new Item("C", 20.00), 2);
+            c.AddItem(new Item("D", 15.00), 1);
+            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            Assert.NotNull(cartDetails);
+            Assert.Equal(11, c.GetItemsCount());
+        }
+
     }
 }

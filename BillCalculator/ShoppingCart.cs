@@ -41,5 +41,16 @@
 
             return totalBilll;
         }
+
+        public int GetItemsCount()
+        {
+            int count = 0;
+            foreach (Item item in this.itemDetails.Keys)
+            {
+                count = count + this.itemDetails[item];
+            }
+
+            return count;
+        }
     }
 }

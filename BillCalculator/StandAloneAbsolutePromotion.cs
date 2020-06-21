@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BillCalculator
+﻿namespace BillCalculator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class StandAloneAbsolutePromotion : IPromotion
     {
         private Item item;
@@ -19,24 +19,33 @@ namespace BillCalculator
 
         public double Execute(ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
-            int quantity = itemDetailsWithoutOffer[item];
+            int quantity = itemDetailsWithoutOffer[this.item];
             int executionCount = quantity / this.eligibleQuantity;
-            if (executionCount == 0)
+            if (!this.IsOfferEligible(executionCount))
             {
                 return 0;
             }
             else
             {
+                this.RemoveItemsEligibleForPromotion(ref itemDetailsWithoutOffer, executionCount);
                 double discountedPrice = executionCount * this.promotionPrice;
-                int itemCountToRemove = executionCount * this.eligibleQuantity;
-                itemDetailsWithoutOffer[this.item] = itemDetailsWithoutOffer[this.item] - itemCountToRemove;
-                if (itemDetailsWithoutOffer[this.item] == 0)
-                {
-                    itemDetailsWithoutOffer.Remove(this.item);
-                }
-
                 return discountedPrice;
             }
+        }
+
+        private void RemoveItemsEligibleForPromotion(ref Dictionary<Item, int> itemDetailsWithoutOffer, int executionCount)
+        {
+            int itemCountToRemove = executionCount * this.eligibleQuantity;
+            itemDetailsWithoutOffer[this.item] = itemDetailsWithoutOffer[this.item] - itemCountToRemove;
+            if (itemDetailsWithoutOffer[this.item] == 0)
+            {
+                itemDetailsWithoutOffer.Remove(this.item);
+            }
+        }
+
+        private bool IsOfferEligible(int executionCount)
+        {
+            return executionCount > 0;
         }
     }
 }

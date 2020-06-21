@@ -61,8 +61,10 @@ namespace BillCalculator.Tests
             ShoppingCart c = new ShoppingCart();
             c.AddItem(B, 5);
             Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            List<IPromotion> promoList = new List<IPromotion>();
+            promoList.Add(twoBfor45);
             Assert.NotNull(cartDetails);
-            Assert.Equal(120, c.GetCartTotalWithOffer(twoBfor45));
+            Assert.Equal(120, c.GetCartTotalWithPromotion(promoList));
         }
 
         [Fact]
@@ -78,8 +80,10 @@ namespace BillCalculator.Tests
             c.AddItem(C, 2);
             c.AddItem(D);
             Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            List<IPromotion> promoList = new List<IPromotion>();
+            promoList.Add(cAndDFor30);
             Assert.NotNull(cartDetails);
-            Assert.Equal(50, c.GetCartTotalWithOffer(cAndDFor30));
+            Assert.Equal(50, c.GetCartTotalWithPromotion(promoList));
         }
 
     }

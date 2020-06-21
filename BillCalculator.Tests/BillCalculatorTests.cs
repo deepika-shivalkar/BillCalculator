@@ -1,6 +1,7 @@
 namespace BillCalculator.Tests
 {
-    using BillCalculator;
+    using BillCalculator.Promotion;
+    using BillCalculator.ShoppingCart;
     using System;
     using System.Collections.Generic;
     using Xunit;

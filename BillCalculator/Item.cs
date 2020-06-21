@@ -1,4 +1,4 @@
-﻿namespace BillCalculator
+﻿namespace BillCalculator.ShoppingCart
 {
     using System;
     using System.Collections.Generic;
@@ -18,23 +18,23 @@
         public override bool Equals(object obj)
         {
             return obj is Item item &&
-                   this.name == item.name &&
-                   this.price == item.price;
+                   name == item.name &&
+                   price == item.price;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(this.name, this.price);
+            return HashCode.Combine(name, price);
         }
 
         public string GetName()
         {
-            return this.name;
+            return name;
         }
 
         public double GetPrice()
         {
-            return this.price;
+            return price;
         }
     }
 }

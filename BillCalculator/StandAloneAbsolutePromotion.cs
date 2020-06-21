@@ -1,8 +1,9 @@
-﻿namespace BillCalculator
+﻿namespace BillCalculator.Promotion
 {
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using BillCalculator.ShoppingCart;
 
     public class StandAloneAbsolutePromotion : IPromotion
     {
@@ -19,27 +20,27 @@
 
         public double Execute(ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
-            int quantity = itemDetailsWithoutOffer[this.item];
-            int executionCount = quantity / this.eligibleQuantity;
-            if (!this.IsOfferEligible(executionCount))
+            int quantity = itemDetailsWithoutOffer[item];
+            int executionCount = quantity / eligibleQuantity;
+            if (!IsOfferEligible(executionCount))
             {
                 return 0;
             }
             else
             {
-                this.RemoveItemsEligibleForPromotion(ref itemDetailsWithoutOffer, executionCount);
-                double discountedPrice = executionCount * this.promotionPrice;
+                RemoveItemsEligibleForPromotion(ref itemDetailsWithoutOffer, executionCount);
+                double discountedPrice = executionCount * promotionPrice;
                 return discountedPrice;
             }
         }
 
         private void RemoveItemsEligibleForPromotion(ref Dictionary<Item, int> itemDetailsWithoutOffer, int executionCount)
         {
-            int itemCountToRemove = executionCount * this.eligibleQuantity;
-            itemDetailsWithoutOffer[this.item] = itemDetailsWithoutOffer[this.item] - itemCountToRemove;
-            if (itemDetailsWithoutOffer[this.item] == 0)
+            int itemCountToRemove = executionCount * eligibleQuantity;
+            itemDetailsWithoutOffer[item] = itemDetailsWithoutOffer[item] - itemCountToRemove;
+            if (itemDetailsWithoutOffer[item] == 0)
             {
-                itemDetailsWithoutOffer.Remove(this.item);
+                itemDetailsWithoutOffer.Remove(item);
             }
         }
 

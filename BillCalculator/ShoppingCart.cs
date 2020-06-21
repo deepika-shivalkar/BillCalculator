@@ -1,5 +1,6 @@
-﻿namespace BillCalculator
+﻿namespace BillCalculator.ShoppingCart
 {
+    using BillCalculator.Promotion;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -10,30 +11,35 @@
 
         public void AddItem(Item item)
         {
-            this.AddItem(item, 1);
+            AddItem(item, 1);
         }
 
         public Dictionary<Item, int> GetCartDetails()
         {
-            return this.itemDetails;
+            return itemDetails;
         }
 
         public void AddItem(Item item, int orderQuantity)
         {
-            if (this.itemDetails.ContainsKey(item))
+            if (orderQuantity <= 0)
             {
-                int itemQuantity = this.itemDetails[item];
-                this.itemDetails[item] = itemQuantity + orderQuantity;
+                return;
+            }
+
+            if (itemDetails.ContainsKey(item))
+            {
+                int itemQuantity = itemDetails[item];
+                itemDetails[item] = itemQuantity + orderQuantity;
             }
             else
             {
-                this.itemDetails.Add(item, orderQuantity);
+                itemDetails.Add(item, orderQuantity);
             }
         }
 
         public double GetCartTotal()
         {
-            return this.GetCartTotal(this.itemDetails);
+            return GetCartTotal(itemDetails);
         }
 
         public double GetCartTotal(Dictionary<Item, int> itemDetails)
@@ -41,7 +47,7 @@
             double totalBilll = 0;
             foreach (Item item in itemDetails.Keys)
             {
-                totalBilll = totalBilll + (item.GetPrice() * itemDetails[item]);
+                totalBilll = totalBilll + item.GetPrice() * itemDetails[item];
             }
 
             return totalBilll;
@@ -50,9 +56,9 @@
         public int GetItemsCount()
         {
             int count = 0;
-            foreach (Item item in this.itemDetails.Keys)
+            foreach (Item item in itemDetails.Keys)
             {
-                count = count + this.itemDetails[item];
+                count = count + itemDetails[item];
             }
 
             return count;
@@ -61,23 +67,23 @@
         public double GetCartTotalWithPromotion(List<IPromotion> promoList)
         {
             Dictionary<Item, int> itemDetailsWithoutPromotion = new Dictionary<Item, int>();
-            double promoPrice = this.PriceOfItemsWithPromotion(promoList, ref itemDetailsWithoutPromotion);
+            double promoPrice = PriceOfItemsWithPromotion(promoList, ref itemDetailsWithoutPromotion);
 
-            double nonPromoPrice = this.PriceOfItemsWithoutPromotion(ref itemDetailsWithoutPromotion);
+            double nonPromoPrice = PriceOfItemsWithoutPromotion(ref itemDetailsWithoutPromotion);
 
             return promoPrice + nonPromoPrice;
         }
 
         private double PriceOfItemsWithoutPromotion(ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
-            return this.GetCartTotal(itemDetailsWithoutOffer);
+            return GetCartTotal(itemDetailsWithoutOffer);
         }
 
         private double PriceOfItemsWithPromotion(List<IPromotion> promoList, ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
-            foreach (Item item in this.itemDetails.Keys)
+            foreach (Item item in itemDetails.Keys)
             {
-                itemDetailsWithoutOffer.Add(item, this.itemDetails[item]);
+                itemDetailsWithoutOffer.Add(item, itemDetails[item]);
             }
 
             double discountedTotal = 0;

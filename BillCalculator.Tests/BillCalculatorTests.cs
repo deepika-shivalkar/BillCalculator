@@ -10,7 +10,7 @@ namespace BillCalculator.Tests
         {
             ShoppingCart c = new ShoppingCart();
             Item A = new Item("A", 50.00);
-
+            c.AddItem(A);
         }
     }
 }

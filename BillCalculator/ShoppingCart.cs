@@ -6,5 +6,9 @@ namespace BillCalculator
 {
     public class ShoppingCart
     {
+        public void AddItem(Item item)
+        {
+            
+        }
     }
 }

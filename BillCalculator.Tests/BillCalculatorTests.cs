@@ -124,6 +124,25 @@ namespace BillCalculator.Tests
             Assert.Equal(370, sc.GetCartTotalWithPromotion(promoList));
         }
 
+        [Fact]
+        public void ShouldExecuteScenarioC()
+        {
+            ShoppingCart sc = new ShoppingCart();
+            Item a = new Item("A", 50.00);
+            Item b = new Item("B", 30.00);
+            Item c = new Item("C", 20.00);
+            Item d = new Item("D", 15.00);
+            sc.AddItem(a, 3);
+            sc.AddItem(b, 5);
+            sc.AddItem(c);
+            sc.AddItem(d);
+            List<IPromotion> promoList = this.GetAvailablePromotions(a, b, c, d);
+            Dictionary<Item, int> cartDetails = sc.GetCartDetails();
+
+            Assert.NotNull(cartDetails);
+            Assert.Equal(280, sc.GetCartTotalWithPromotion(promoList));
+        }
+
         private List<IPromotion> GetAvailablePromotions(Item a, Item b, Item c, Item d)
         {
             IPromotion threeAFor130 = new StandAloneAbsolutePromotion(a, 3, 130.00);

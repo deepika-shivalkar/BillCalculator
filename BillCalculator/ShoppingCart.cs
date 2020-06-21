@@ -33,10 +33,15 @@
 
         public double GetCartTotal()
         {
+            return this.GetCartTotal(this.itemDetails);
+        }
+
+        public double GetCartTotal(Dictionary<Item, int> itemDetails)
+        {
             double totalBilll = 0;
-            foreach (Item item in this.itemDetails.Keys)
+            foreach (Item item in itemDetails.Keys)
             {
-                totalBilll = totalBilll + (item.GetPrice() * this.itemDetails[item]);
+                totalBilll = totalBilll + (item.GetPrice() * itemDetails[item]);
             }
 
             return totalBilll;
@@ -56,18 +61,26 @@
         public double GetCartTotalWithOffer(IPromotion promotion)
         {
             Dictionary<Item, int> itemDetailsWithoutOffer = new Dictionary<Item, int>();
+            double promoPrice = this.PriceOfItemsWithPromotion(promotion, ref itemDetailsWithoutOffer);
+
+            double nonPromoPrice = this.PriceOfItemsWithoutPromotion(ref itemDetailsWithoutOffer);
+
+            return promoPrice + nonPromoPrice;
+        }
+
+        private double PriceOfItemsWithoutPromotion(ref Dictionary<Item, int> itemDetailsWithoutOffer)
+        {
+            return this.GetCartTotal(itemDetailsWithoutOffer);
+        }
+
+        private double PriceOfItemsWithPromotion(IPromotion promotion, ref Dictionary<Item, int> itemDetailsWithoutOffer)
+        {
             foreach (Item item in this.itemDetails.Keys)
             {
                 itemDetailsWithoutOffer.Add(item, this.itemDetails[item]);
             }
 
             double discountedTotal = promotion.Execute(ref itemDetailsWithoutOffer);
-
-            foreach (Item item in itemDetailsWithoutOffer.Keys)
-            {
-                discountedTotal = discountedTotal + (item.GetPrice() * itemDetailsWithoutOffer[item]);
-            }
-
             return discountedTotal;
         }
     }

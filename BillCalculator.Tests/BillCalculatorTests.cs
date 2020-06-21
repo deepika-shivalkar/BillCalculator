@@ -6,9 +6,10 @@ namespace BillCalculator.Tests
     public class BillCalculatorTests
     {
         [Fact]
-        public void Test1()
+        public void ShouldAddSingleItemsToCart()
         {
-
+            ShoppingCart c = new ShoppingCart();
+            
         }
     }
 }

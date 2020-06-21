@@ -14,5 +14,17 @@ namespace BillCalculator
             this.name = name;
             this.price = price;
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Item item &&
+                   name == item.name &&
+                   price == item.price;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(name, price);
+        }
     }
 }

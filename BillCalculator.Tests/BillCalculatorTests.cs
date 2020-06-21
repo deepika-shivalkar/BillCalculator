@@ -13,6 +13,8 @@ namespace BillCalculator.Tests
             Item A = new Item("A", 50.00);
             c.AddItem(A);
             Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            Assert.NotNull(cartDetails);
+            Assert.Equal(1, cartDetails[A]);
         }
     }
 }

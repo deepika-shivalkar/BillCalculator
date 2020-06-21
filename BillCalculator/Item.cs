@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BillCalculator
+﻿namespace BillCalculator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
     public class Item
     {
         private string name;
@@ -18,13 +18,23 @@ namespace BillCalculator
         public override bool Equals(object obj)
         {
             return obj is Item item &&
-                   name == item.name &&
-                   price == item.price;
+                   this.name == item.name &&
+                   this.price == item.price;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(name, price);
+            return HashCode.Combine(this.name, this.price);
+        }
+
+        public string GetName()
+        {
+            return this.name;
+        }
+
+        public double GetPrice()
+        {
+            return this.price;
         }
     }
 }

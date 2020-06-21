@@ -9,7 +9,8 @@ namespace BillCalculator.Tests
         public void ShouldAddSingleItemsToCart()
         {
             ShoppingCart c = new ShoppingCart();
-            
+            Item A = new Item("A", 50.00);
+
         }
     }
 }

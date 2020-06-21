@@ -16,5 +16,16 @@ namespace BillCalculator.Tests
             Assert.NotNull(cartDetails);
             Assert.Equal(1, cartDetails[A]);
         }
+
+        [Fact]
+        public void ShouldAddMultipleItemsToCart()
+        {
+            ShoppingCart c = new ShoppingCart();
+            c.AddItem(new Item("A", 50.00), 3);
+            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+            Assert.NotNull(cartDetails);
+            Assert.Equal(3, cartDetails[new Item("A", 50.00)]);
+        }
+
     }
 }

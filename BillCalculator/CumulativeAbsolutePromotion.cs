@@ -17,30 +17,30 @@
             this.promotionPrice = promotionPrice;
             foreach (Item item in itemList)
             {
-                if (promoDetails.ContainsKey(item))
+                if (this.promoDetails.ContainsKey(item))
                 {
-                    int itemQuantity = promoDetails[item];
-                    promoDetails[item] = itemQuantity + 1;
+                    int itemQuantity = this.promoDetails[item];
+                    this.promoDetails[item] = itemQuantity + 1;
                 }
                 else
                 {
-                    promoDetails.Add(item, 1);
+                    this.promoDetails.Add(item, 1);
                 }
             }
         }
 
         public double Execute(ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
-            int finalExecutionCount = GetExecutionCountForPromo(ref itemDetailsWithoutOffer);
+            int finalExecutionCount = this.GetExecutionCountForPromo(ref itemDetailsWithoutOffer);
 
             if (!IsOfferEligible(finalExecutionCount))
             {
                 return 0;
             }
 
-            RemoveItemsEligibleForPromotion(itemDetailsWithoutOffer, finalExecutionCount);
+            this.RemoveItemsEligibleForPromotion(itemDetailsWithoutOffer, finalExecutionCount);
 
-            double discountedPrice = finalExecutionCount * promotionPrice;
+            double discountedPrice = finalExecutionCount * this.promotionPrice;
 
             return discountedPrice;
         }
@@ -52,30 +52,36 @@
 
         private void RemoveItemsEligibleForPromotion(Dictionary<Item, int> itemDetailsWithoutOffer, int finalExecutionCount)
         {
-            foreach (Item promoItem in promoDetails.Keys)
+            foreach (Item promoItem in this.promoDetails.Keys)
             {
-                itemDetailsWithoutOffer[promoItem] = itemDetailsWithoutOffer[promoItem] - finalExecutionCount * promoDetails[promoItem];
+                itemDetailsWithoutOffer[promoItem] = itemDetailsWithoutOffer[promoItem] - (finalExecutionCount * this.promoDetails[promoItem]);
+                if (itemDetailsWithoutOffer[promoItem] == 0)
+                {
+                    itemDetailsWithoutOffer.Remove(promoItem);
+                }
             }
+
         }
 
         private int GetExecutionCountForPromo(ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
             int finalExecutionCount = int.MaxValue;
-            foreach (Item promoItem in promoDetails.Keys)
+            foreach (Item promoItem in this.promoDetails.Keys)
             {
-                if (!itemDetailsWithoutOffer.ContainsKey(promoItem) || itemDetailsWithoutOffer[promoItem] < promoDetails[promoItem])
+                if (!itemDetailsWithoutOffer.ContainsKey(promoItem) || itemDetailsWithoutOffer[promoItem] < this.promoDetails[promoItem])
                 {
                     return 0;
                 }
 
                 int itemCountFromCart = itemDetailsWithoutOffer[promoItem];
-                int itemCountEligibleForOffer = promoDetails[promoItem];
+                int itemCountEligibleForOffer = this.promoDetails[promoItem];
                 int executionCount = itemCountFromCart / itemCountEligibleForOffer;
                 if (executionCount < finalExecutionCount)
                 {
                     finalExecutionCount = executionCount;
                 }
             }
+
             return finalExecutionCount;
         }
     }

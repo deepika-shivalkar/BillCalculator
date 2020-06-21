@@ -20,27 +20,27 @@
 
         public double Execute(ref Dictionary<Item, int> itemDetailsWithoutOffer)
         {
-            int quantity = itemDetailsWithoutOffer[item];
-            int executionCount = quantity / eligibleQuantity;
-            if (!IsOfferEligible(executionCount))
+            int quantity = itemDetailsWithoutOffer[this.item];
+            int executionCount = quantity / this.eligibleQuantity;
+            if (!this.IsOfferEligible(executionCount))
             {
                 return 0;
             }
             else
             {
-                RemoveItemsEligibleForPromotion(ref itemDetailsWithoutOffer, executionCount);
-                double discountedPrice = executionCount * promotionPrice;
+                this.RemoveItemsEligibleForPromotion(ref itemDetailsWithoutOffer, executionCount);
+                double discountedPrice = executionCount * this.promotionPrice;
                 return discountedPrice;
             }
         }
 
         private void RemoveItemsEligibleForPromotion(ref Dictionary<Item, int> itemDetailsWithoutOffer, int executionCount)
         {
-            int itemCountToRemove = executionCount * eligibleQuantity;
-            itemDetailsWithoutOffer[item] = itemDetailsWithoutOffer[item] - itemCountToRemove;
-            if (itemDetailsWithoutOffer[item] == 0)
+            int itemCountToRemove = executionCount * this.eligibleQuantity;
+            itemDetailsWithoutOffer[this.item] = itemDetailsWithoutOffer[this.item] - itemCountToRemove;
+            if (itemDetailsWithoutOffer[this.item] == 0)
             {
-                itemDetailsWithoutOffer.Remove(item);
+                itemDetailsWithoutOffer.Remove(this.item);
             }
         }
 

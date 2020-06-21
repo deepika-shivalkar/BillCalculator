@@ -1,5 +1,6 @@
 namespace BillCalculator.Tests
 {
+    using BillCalculator;
     using System;
     using System.Collections.Generic;
     using Xunit;
@@ -86,5 +87,39 @@ namespace BillCalculator.Tests
             Assert.Equal(50, c.GetCartTotalWithPromotion(promoList));
         }
 
+        
+
+        [Fact]
+        public void ShouldExecuteScenarioB()
+        {
+            ShoppingCart c = new ShoppingCart();
+            Item A = new Item("A", 50.00);
+            Item B = new Item("B", 30.00);
+            Item C = new Item("C", 20.00);
+            Item D = new Item("D", 15.00);
+            c.AddItem(A, 5);
+            c.AddItem(B, 5);
+            c.AddItem(C);
+            List<IPromotion> promoList = this.GetAvailablePromotions(A, B, C, D);
+            Dictionary<Item, int> cartDetails = c.GetCartDetails();
+
+            Assert.NotNull(cartDetails);
+            Assert.Equal(370, c.GetCartTotalWithPromotion(promoList));
+        }
+
+        private List<IPromotion> GetAvailablePromotions(Item A, Item B, Item C, Item D)
+        {
+            IPromotion threeAFor130 = new StandAloneAbsolutePromotion(A, 3, 130.00);
+            IPromotion twoBFor45 = new StandAloneAbsolutePromotion(B, 2, 45.00);
+            List<Item> itemList = new List<Item>();
+            itemList.Add(C);
+            itemList.Add(D);
+            IPromotion cAndDFor30 = new CumulativeAbsolutePromotion(itemList, 30.00);
+            List<IPromotion> promoList = new List<IPromotion>();
+            promoList.Add(threeAFor130);
+            promoList.Add(twoBFor45);
+            promoList.Add(cAndDFor30);
+            return promoList;
+        }
     }
 }

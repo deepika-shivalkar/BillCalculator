@@ -10,5 +10,10 @@ namespace BillCalculator
         {
             
         }
+
+        public Dictionary<Item, int> GetCartDetails()
+        {
+            return new Dictionary<Item, int>();
+        }
     }
 }

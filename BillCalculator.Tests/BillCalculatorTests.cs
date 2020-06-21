@@ -53,5 +53,13 @@ namespace BillCalculator.Tests
             Assert.Equal(11, c.GetItemsCount());
         }
 
+        [Fact]
+        public void ShouldExecuteSingleStandAloneAbsolutePromotionOnShoppingCart()
+        {
+            Item B = new Item("B", 30.00);
+            IPromotion twoBfor45 = new StandAloneAbsolutePromotion(B, 2, 45.00);
+           
+        }
+
     }
 }
